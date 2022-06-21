@@ -54,3 +54,20 @@ Il file contiene tutti i dati di processo relativi alle colate ESR registrati ne
   + elettrodo / lingotto ESR
   + potenza utilizzata durante la rifusione
   + durata della rifusione
+
+```{r caricamento_file_opt, include = TRUE}
+headerSF <- read_delim('/data/ESRSF286/header/header_SF286.txt',
+                     delim='|', 
+                     col_type=cols(),
+                     )
+
+```
+
+Il file è composto da `r nrow(headerSF)` colonne, con le seguenti specifiche
+
+
+
+```{r plot_tabella_opt, include = TRUE}
+cas_kable(headerSF, caption='header')
+```
+
