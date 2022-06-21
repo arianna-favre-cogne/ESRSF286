@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+*.Rproj
+doc/*.png
+doc/*.html
+__pycache__
