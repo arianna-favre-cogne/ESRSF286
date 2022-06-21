@@ -1,7 +1,7 @@
 ---
 title: "Progetto"
-subtitle: "cas415"
-author: "anna.savino@cogne.com"
+subtitle: "ESRSF286"
+author: "pbrunier@cogne.com"
 version: 1.0 
 date: "`r Sys.Date()`"
 output:
@@ -20,7 +20,7 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = FALSE,
+knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
                       error = FALSE,
@@ -29,25 +29,16 @@ knitr::opts_chunk$set(echo = FALSE,
                       collapse = TRUE,
                       cols.print=20)
 rm(list = ls(all.names = TRUE))
-
+require(dplyr)
+require(rlang)
+require(kableExtra)
+require(readr)
+require(ggplot2)
+source('~/dev/ESRSF286/R/function.R')
 ```
 
+
 # Obiettivo
-
-L'obiettivo del progetto consiste:
-
-1. identificare fra le variabili di processo quelle che hanno un impatto significativo sulle caratteristiche meccaniche a trazione delle barre PEL in 415M3.
-
-2. misurare per le variabili di processo significative la misura dell'impatto.
-
-3. costruire un modello che permetta stimare le caratteristische meccaniche in funzione di tale variabile, evidenziandone i limiti  
-
-
-Caratteristiche meccaniche:
-
-+ Rm: carico a rottura [MPa] 
-+ Rp02: carico a snervamento [MPa]
-
 
 
 # Fasi del progetto

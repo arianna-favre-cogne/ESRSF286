@@ -1,7 +1,7 @@
 ---
 title: "Data Mapping "
-subtitle: "cas415"
-author: "federico.fiou@cogne.com"
+subtitle: "ESRSF286"
+author: "philippe.brunier@cogne.com"
 version: 1.0 
 date: "`r Sys.Date()`"
 output:
@@ -33,47 +33,24 @@ rm(list = ls(all.names = TRUE))
 require(dplyr)
 require(kableExtra)
 require(readr)
-source('~/dev/cas415/R/function.R')
+source('~/dev/ESRSF286/R/function.R')
 ```
 
 # File
 
 I file utilizati in questo progetto sono: 
 
-1. carmet415M3.txt
+1. SF286_2020_2021.csv
 1. header.csv
-1. Rm_415m3_schede.csv
-
-## carmet415M3 
-
-Il file contiene tutti i dati di processo relativi alle colate presi da:
-
-+ APC (rcchim01)
-+ cariche (inquery)
 
 
-```{r caricamento_file, include = TRUE}
-header <- read_delim('/data/cas415/header.csv', delim=';', col_type=cols())
-```
+## SF286_2020_2021
 
-Il file è composto da `r nrow(header)` colonne, con le seguenti specifiche
+Il file contiene tutti i dati di processo relativi alle colate ESR registrati negli anni 2020 e 2021. Il file contiene
 
-```{r plot_tabella, include = TRUE}
-cas_kable(header, caption='header')
-```
-
-Il file è diviso in quatro sezioni 
-
-1. identificativo colata
-1. variabili risposta
-1. analisi chimiche finali di colata
-1. quantità materiale di carica
-
-## Rm_415m3_schede
-
-Il file contiene i dati delle prove meccaniche (Rm, Rp02) per scheda. Presi da intranet. Le schede fanno riferimento alle colate di carmet415. 
-
-Data la struttura iniziale del report intranet i dati sono stati preprocessati pivotando gli originali.  
-
-*La verifica dei dati (duplicati, valori mancanti o sbagliati, ...) non è ancora stata fatta*
-
++ finali colata AOD
++ dati processo ESR 
+  + postazione / torre
+  + elettrodo / lingotto ESR
+  + potenza utilizzata durante la rifusione
+  + durata della rifusione
