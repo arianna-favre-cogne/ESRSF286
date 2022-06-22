@@ -140,3 +140,37 @@ for (i in seq_len(n)) {
 ```
 
 
+# analisi delle variabili discrete vs variabile risposta
+
+```{python statistica variabili discrete}
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_pickle('/data/ESRSF286/ESRSF286.pkl')
+df = df[df.sc_perc<=100]
+df = df[df.sc_perc>=0.]
+
+disc_vars = ['lingottiera','causa','ese','torre_esr','postazione_esr','elettrodo_esr','lingotto_esr','anomalie_ESR']
+
+for vv in disc_vars:
+  
+  dfg = df.groupby(vv)
+  dfgrouped = pd.DataFrame({'counts':dfg.odp.count(),
+    'mean_sc':dfg.sc_perc.mean(),
+    'std_dev_sc':dfg.sc_perc.std()})
+  
+  print(vv)
+  print(dfgrouped)
+  
+  plt.figure(dpi=480)
+
+  plt.style.use('seaborn')
+  
+  df.boxplot(column='sc_perc',by=vv, rot=90)
+  
+  plt.show()
+plt.style.use('default')
+
+```
