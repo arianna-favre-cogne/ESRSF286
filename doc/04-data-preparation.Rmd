@@ -1,6 +1,6 @@
 ---
 title: "Data Preparation "
-subtitle: "cas415"
+subtitle: "ESRSF286"
 author: "pbrunier@cogne.com"
 version: 1.0 
 date: "`r Sys.Date()`"
@@ -33,39 +33,40 @@ rm(list = ls(all.names = TRUE))
 require(dplyr)
 require(kableExtra)
 require(readr)
-source('~/dev/cas415/R/function.R')
+require(reticulate)
+
+source('~/dev/ESRSF286/R/function.R')
 ```
 
-# Dati per scheda
+# Dati per odp
 
 Importiamo il file header.csv
 
 
-```{r asdf}
-header <- read_delim('/data/cas415/header.csv', 
+```{r header_load}
+header <- read_delim('/data/ESRSF286/header/header_ESRSF286_R.csv', 
                      delim=';',
                      col_type=cols())
 
 
 ```
 
-Ci siamo dimenticati di mettere i data type
 
-```{r aserty}
-col_type <- paste('_cc',paste(rep('d',69),collapse = ''),sep = '')
-```
-estraiamo i colnames dall'header
+estraiamo i colnames ed i coltypes dall'header
 
-```{r qwerty}
+```{r estraction_info}
 col_name <- header %>% 
   pull(col_name)
+
+col_type <- header %>%
+  pull(data_type)
 ```
 
 leggiamo i dati 
 
-```{r zerty}
-carmet415M3_chimiche <- read_delim('/data/cas415/carmet415M3.txt',
-                          delim = ',',
+```{r read_data}
+datiSF <- read_delim('/data/ESRSF286/dati_SF286_2020_2021.csv',
+                          delim = ';',
                           skip = 1,
                           col_names = col_name,
                           col_types = col_type,
@@ -73,160 +74,51 @@ carmet415M3_chimiche <- read_delim('/data/cas415/carmet415M3.txt',
 
 ```
 
-prendiamo soltanto le colate con le relative chimiche e cariche
+aggiungiamo la colonna scarto_perc, intesa come
 
-```{r rty}
-carmet415M3_chimiche <- carmet415M3_chimiche %>% 
-  select(colata,C:sfrido_molaggio_inox) 
+$sc_{perc} = kg_{deviato} / kg_{impiegato} *100$
 
-colate_d <-carmet415M3_chimiche %>% 
-  group_by(colata) %>% 
-  count() %>% 
-  filter(n > 1) %>% 
-  pull(colata)
+```{r scarto}
+datiSF <- datiSF %>%
+  filter(kg_impiegato > 0.)
+  
 
-carmet415M3_chimiche <- carmet415M3_chimiche %>% 
-  filter(!c(colata %in% colate_d)) %>% 
-  arrange(colata)
-
+datiSF <- datiSF %>%
+  mutate(sc_perc = kg_deviato/kg_impiegato *100)
 ```
 
-leggiamo i dati delle schede
+aggiungiamo la colonna energia_tot, intesa come
 
-```{r zty}
-carmet415M3_schede <- read_delim('/data/cas415/Rm_415m3_schede.csv',
-                          delim = ';',
-                          skip = 0,
-                          #col_names = col_name,
-                          col_types = 'cdc',
-                          n_max = Inf,
-                          na = c("",-1, "NA")) #sostituire -1 con NA
+$E_{ESR} = \frac{metling rate}{melting power} /1e3 [kW]$
+
+```{r energia}
+datiSF <- datiSF %>%
+  filter(melting_power > 1)
+
+datiSF <- datiSF %>%
+  mutate(energia = melting_rate/melting_power/1000)
 ```
-
-uniamo i due dataset
-
-```{r ztfddy}
-carmet415M3 <- carmet415M3_chimiche %>% 
-  left_join(carmet415M3_schede,by='colata') %>% 
-  select(colata,scheda,rm,everything())
-```
-
-verifichiamo il join
-
-```{r ztfdy}
-carmet415M3 <- carmet415M3  %>% 
-  filter(!is.na(rm))
-```
-
-eliminiamo valori inferiori a 700
-
-```{r zdy}
-carmet415M3 <- carmet415M3 %>% 
-  filter(rm>700)
-```
-
-aggiungiamo la colonna Nb+V
-
-```{r zdydg}
-carmet415M3 <- carmet415M3 %>% 
-mutate(sommaNbV = Nb + V) %>% 
-select(colata, scheda, rm, sommaNbV, everything())
-```
-
-fuori specifica
-
-```{r ala}
-lsl <- 900
-usl <- 1100
-center <- 1000
-carmet415M3 <- carmet415M3 %>% 
-  mutate(rm_test1=ifelse(rm>usl|rm<lsl,'failed','passed'),
-         usl=1100,
-         lsl=900,
-         center=1000)
-```
-
 
 riordino variabili
 
-```{r djfbs}
-carmet415M3 <- carmet415M3 %>% 
-  select(colata,scheda,rm,rm_test1,everything())
+```{r ordering}
+datiSF <- datiSF %>% 
+  select(odp,colata_madre,data_collaudo,colata_esr,data_esr,cdl,ese,sc_perc,
+         everything())
 ```
 
 aggiugo indici di riga nella prima colonna
 
-```{r dsjfkwj}
-carmet415M3 <- carmet415M3 %>% 
+```{r indexing}
+datiSF <- datiSF %>% 
   mutate(index = row_number()) %>% 
   select(index, everything())
-```
-
-contiamo le righe carmet415M3, carmet415M3_chimiche, carmet415M3_schede
-
-```{r serty}
-nrow(carmet415M3)
-nrow(carmet415M3_chimiche)
-nrow(carmet415M3_schede)
-```
-
-salva rds
-
-```{r xerty}
-write_rds(carmet415M3,'/data/cas415/carmet415M3.rds')
-```
-
-
-
-
-# Dati per colata (Rm medio)
-
-```{r}
-carmet415M3col <- carmet415M3 %>% 
-  group_by(colata) %>% 
-  mutate(rm_medio = mean(rm), rm_sd = sd(rm)) %>% 
-  select(-index, -rm, -rm_test1, -scheda, -usl, -lsl, -center) %>% 
-  select(colata, rm_medio, rm_sd, everything()) %>% 
-  unique() %>% 
-  ungroup()
-
-```
-
-
-fuori specifica
-
-```{r ahla}
-lsl <- 900
-usl <- 1100
-center <- 1000
-carmet415M3col <- carmet415M3col %>% 
-  mutate(rm_test1=ifelse(rm_medio>usl|rm_medio<lsl,'failed','passed'),
-         usl=1100,
-         lsl=900,
-         center=1000)
-```
-
-
-riordino variabili
-
-```{r djhfbs}
-carmet415M3col <- carmet415M3col %>% 
-  select(colata,rm_medio,rm_test1,everything())
-```
-
-aggiugo indici di riga nella prima colonna
-
-```{r dsjfhkwj}
-carmet415M3col <- carmet415M3col %>% 
-  mutate(index = row_number()) %>% 
-  select(index, everything())
-
 ```
 
 
 
 salva rds
 
-```{r xehrty}
-write_rds(carmet415M3col,'/data/cas415/carmet415M3colata.rds')
+```{r saving}
+write_rds(datiSF,'/data/ESRSF286/ESRSF286.rds')
 ```
