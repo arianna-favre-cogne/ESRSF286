@@ -40,8 +40,10 @@ source('~/dev/ESRSF286/R/function.R')
 
 I file utilizati in questo progetto sono: 
 
-1. SF286_2020_2021.csv
-1. header.csv
++ dati_SF286_2020_2021.csv
++ header_ESRSF286_R.csv
+
+(entrambi .csv, separati da ;)
 
 
 ## SF286_2020_2021
@@ -54,16 +56,17 @@ Il file contiene tutti i dati di processo relativi alle colate ESR registrati ne
   + elettrodo / lingotto ESR
   + potenza utilizzata durante la rifusione
   + durata della rifusione
+  + anomalie o note
 
 ```{r caricamento_file_opt, include = TRUE}
-headerSF <- read_delim('/data/ESRSF286/header/header_SF286.txt',
-                     delim='|', 
+headerSF <- read_delim('/data/ESRSF286/header/header_ESRSF286_R.csv',
+                     delim=';', 
                      col_type=cols(),
                      )
 
 ```
 
-Il file è composto da `r nrow(headerSF)` colonne, con le seguenti specifiche
+Il file è composto da `r nrow(headerSF)` colonne, con le seguenti specifiche:
 
 
 
