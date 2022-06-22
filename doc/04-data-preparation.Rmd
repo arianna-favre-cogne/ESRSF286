@@ -104,6 +104,7 @@ riordino variabili
 ```{r ordering}
 datiSF <- datiSF %>% 
   select(odp,colata_madre,data_collaudo,colata_esr,data_esr,cdl,ese,sc_perc,
+         anomalie_ESR,
          everything())
 ```
 
