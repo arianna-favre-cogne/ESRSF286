@@ -34,18 +34,109 @@ require(rlang)
 require(kableExtra)
 require(readr)
 require(ggplot2)
+require(reticulate)
 source('~/dev/ESRSF286/R/function.R')
 ```
 
 leggiamo i dati 
 
 
+```{r reading}
+datiSF <- read_rds('/data/ESRSF286/ESRSF286.rds')
+                       
+```
 # Analisi della variabile risposta (scarto)
 
+```{r passagio}
 
-# Analisi delle variabili input (chimica + processo)
+# dati <- datiSF
+# py$df <- dati
+
+```
 
 
 
-# Analisi delle correlazioni variabili input VS variabile risposta
+```{python analisi plot}
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# 
+# df = pd.DataFrame(df)
+# 
+# 
+# df_sc = df[df.sc_perc>=0]
+# df_sc = df_sc[df_sc.sc_perc <= 100]
+# 
+# plt.style.use('seaborn')
+# plt.figure(figsize=(10,6))
+# plt.plot(df_sc.sc_perc,'-o')
+# 
+# plt.show()
+# plt.style.use('default')
+
+
+```
+
+abbiamo due riferimenti temporali:
+
++ data di collaudo
++ data di rifusione ESR
+
+```{r analisi sc_perc}
+
+dati_sc <- datiSF %>%
+  filter(sc_perc > 0.)
+
+dati_sc <- dati_sc %>%
+  filter(sc_perc <= 100.)
+
+pl_coll <- ggplot(dati_sc)+
+  geom_line(aes(data_collaudo,sc_perc))+
+  geom_point(aes(data_collaudo,sc_perc, color='test'))+
+  geom_smooth(aes(data_collaudo,sc_perc),method = 'loess', se=FALSE, col='red')
+
+  print(pl_coll)
+  
+pl_esr <- ggplot(dati_sc)+
+  geom_line(aes(data_esr,sc_perc))+
+  geom_point(aes(data_esr,sc_perc, color='test'))+
+  geom_smooth(aes(data_esr,sc_perc),method = 'loess', se=FALSE, col='red')
+
+  print(pl_esr)
+                       
+```
+
+# Analisi delle variabili di input continue (chimica + processo) VS variabile risposta
+
+
+
+```{r plotting ,results='asis'}
+response <- 'sc_perc'
+vars <- dati_sc %>% 
+  select(melting_rate:energia) %>%
+  names()
+n <- length(vars)
+
+for (i in seq_len(n)) {
+  var_i <- vars[i]
+  pl <- ggplot(dati_sc) +
+    geom_point(aes(!!sym(var_i),!!sym(response))) +
+    geom_smooth(
+      aes(!!sym(var_i),!!sym(response)),
+      color = 'red',
+      se = FALSE,
+      method = 'loess'
+    ) +
+    geom_smooth(
+      aes(!!sym(var_i),!!sym(response)),
+      color = 'green',
+      se = FALSE,
+      method = 'lm'
+    )
+  title <- paste('## Variabile: ', var_i)
+  cat(title, '\n')
+  print(pl)
+  cat('<p>') #necessario per terminare paragrafo
+}
+```
+
 
