@@ -39,3 +39,10 @@ source('~/dev/ESRSF286/R/function.R')
 
 
 # Processo
+
+Nel 2020 i CND segnalano l'aumento del sospeso al collaudo UT sul prodotto laminato al TBB o fucinato della marca **SF286** rifuso ESR. La causale della sospensione è per difetti fuori asse (freckles). Il materiale sospeso e che risulta avere FBH > 2 viene deviato in barre. Un deviato al collaudo UT elevato può causare ritardi alla laminazione in vergella e nei casi peggiori mancanza di materiale per soddisfare l'ordine cliente.
+
+A seguito di tale segnalazione è stata avviata una raccolta dei dati di collaudo ultrasuoni e di processo. 
+
+I dati di processo raccolti sono relativi all'analisi chimica della colata madre AOD e dati di rifusione ESR. Verranno pertanto trascurati i parametri di processo a valle della rifusione ESR, perchè ritenuti ininfluenti sulla formazione dei freckles.
+
