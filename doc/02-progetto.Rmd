@@ -40,6 +40,7 @@ source('~/dev/ESRSF286/R/function.R')
 
 # Obiettivo
 
+L'obbiettivo del progetto consiste nell'identificare fra le variabili di processo quelle che hanno un impatto significativo sulla formazione dei difetti individuati dal collaudo ultrasuoni sul laminato TBB o sul fucinato di SF286 rifuso ESR.
 
 # Fasi del progetto
 
