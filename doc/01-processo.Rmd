@@ -40,9 +40,16 @@ source('~/dev/ESRSF286/R/function.R')
 
 # Processo
 
-Nel 2020 i CND segnalano l'aumento del sospeso al collaudo UT sul prodotto laminato al TBB o fucinato della marca **SF286** rifuso ESR. La causale della sospensione è per difetti fuori asse (freckles). Il materiale sospeso e che risulta avere FBH > 2 viene deviato in barre. Un deviato al collaudo UT elevato può causare ritardi alla laminazione in vergella e nei casi peggiori mancanza di materiale per soddisfare l'ordine cliente.
+Nel 2020 i CND segnalano l'aumento del sospeso al collaudo UT sul prodotto laminato al TBB o sul fucinato della marca **SF286** rifuso ESR. La prevalente causale della sospensione è per difetti fuori asse (freckles). Il materiale sospeso e che risulta avere FBH > 2 viene deviato in barre. Un deviato al collaudo UT elevato può causare ritardi alla laminazione in vergella e nei casi peggiori mancanza di materiale per soddisfare l'ordine cliente.
 
-A seguito di tale segnalazione è stata avviata una raccolta dei dati di collaudo ultrasuoni e di processo. 
+A seguito di tale segnalazione, è stata avviata una raccolta dati sul collaudo ultrasuoni e sul processo. 
 
-I dati di processo raccolti sono relativi all'analisi chimica della colata madre AOD e dati di rifusione ESR. Verranno pertanto trascurati i parametri di processo a valle della rifusione ESR, perchè ritenuti ininfluenti sulla formazione dei freckles.
+I dati di processo raccolti sono relativi all'analisi chimica della colata madre AOD e ai dati di rifusione ESR. Verranno pertanto trascurati i parametri dei processi di trasformazione termo-meccanica a valle della rifusione ESR, perchè ritenuti ininfluenti sulla formazione dei freckles.
 
+I dati del collaudo ultrasuoni sono stati estratti da Qlik e fanno riferimento alle schede testate. Ogni scheda corrisponde ad una colata ESR. Più colate ESR corrispondono ad una colata AOD. Il numero di schede per colata AOD è omogeneo.
+
+Per riassumere i dati di processo:
+
++ Ogni colata AOD ha una propria analisi chimica
++ Ogni colata AOD genera N colate ESR
++ Ogni colata ESR genera una scheda
