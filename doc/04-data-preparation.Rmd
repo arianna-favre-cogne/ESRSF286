@@ -124,16 +124,16 @@ salva rds
 write_rds(datiSF,'/data/ESRSF286/ESRSF286.rds')
 ```
 
-```{r passing_variable}
-
-py$df <- datiSF
-```
-
-```{python saving_pkl}
-
-import pandas as pd
-
-df = pd.DataFrame(df)
-df.to_pickle('/data/ESRSF286/ESRSF286.pkl')
-
-```
+<!-- # ```{r passing_variable} -->
+<!-- #  -->
+<!-- # py$df <- datiSF -->
+<!-- # ``` -->
+<!-- #  -->
+<!-- # ```{python saving_pkl} -->
+<!-- #  -->
+<!-- # import pandas as pd -->
+<!-- #  -->
+<!-- # df = pd.DataFrame(df) -->
+<!-- # df.to_pickle('/data/ESRSF286/ESRSF286.pkl') -->
+<!-- #  -->
+<!-- # ``` -->

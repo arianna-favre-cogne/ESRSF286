@@ -140,7 +140,7 @@ for (i in seq_len(n)) {
 ```
 
 
-# analisi delle variabili discrete vs variabile risposta
+<!-- # analisi delle variabili discrete vs variabile risposta -->
 
 <!-- ```{python statistica variabili discrete} -->
 
