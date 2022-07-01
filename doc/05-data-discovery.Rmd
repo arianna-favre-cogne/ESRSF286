@@ -86,8 +86,8 @@ abbiamo due riferimenti temporali:
 dati_sc <- datiSF %>%
   filter(sc_perc > 0.)
 
-dati_sc <- dati_sc %>%
-  filter(sc_perc <= 100.)
+# dati_sc <- dati_sc %>%
+  # filter(sc_perc <= 100.)
 
 pl_coll <- ggplot(dati_sc)+
   geom_line(aes(data_collaudo,sc_perc))+
