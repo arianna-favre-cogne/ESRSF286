@@ -35,6 +35,7 @@ require(kableExtra)
 require(readr)
 require(ggplot2)
 require(reticulate)
+require(tidyr)
 source('~/dev/ESRSF286/R/function.R')
 ```
 
@@ -46,6 +47,97 @@ datiSF <- read_rds('/data/ESRSF286/ESRSF286.rds')
                        
 ```
 # Analisi della variabile risposta (scarto)
+```{r analisi_difetti}
+
+datiSF %>% 
+  group_by(cdl) %>%
+  summarise(n=n()) %>%
+  mutate(n_perc = round(n/sum(n),2))
+
+
+```
+
+per tutti i C.SOSP, vediamo qual'è la causa del difetto
+
+```{r difetto}
+
+datiSF %>% 
+  filter(cdl=='C.SOSP') %>%
+  group_by(causa) %>%
+  summarise(n=n()) %>%
+  mutate(n_perc = round(n/sum(n),2))
+
+```
+
+L'11% percento dei casi è senza causale
+
+Il difetto fuori asse (inclusioni) I03 rappresenta il 61% della casistica
+
+```{r difetti_nel_tempo_I03}
+
+datiSF_I03 <- datiSF %>% 
+  mutate(tipo_difetto = ifelse(causa == 'I03 - DIFETTI FUORI ASSE (INCLUSIONI)','I03','OTHER')) %>% 
+  # mutate(tipo_difetto = ifelse(cdl=='C.UT','NO',tipo_difetto)) %>% 
+  mutate(n_difetti = ifelse(tipo_difetto=='I03',1,0))
+
+
+ggplot(datiSF_I03) +
+# geom_line(aes(index,n_difetti),color='gray',alpha=.75) +
+geom_smooth(aes(index,n_difetti),color='gray',alpha=.75, se=FALSE, span = 0.5) +
+geom_point(aes(index,n_difetti,color=tipo_difetto)) + 
+theme(legend.position = 'bottom')  
+# facet_wrap()
+
+```
+
+andiamo adesso ad analizzare la situazione complessiva di tutti i difetti
+
+```{r difetti_nel_tempo_other}
+
+dati2 <- datiSF %>% 
+  select(index,causa, cdl) %>%
+  mutate(causa = ifelse(causa == '-' ,'NO',causa)) %>%
+  mutate(n_difetti = ifelse(causa != 'NO',1,0)) %>%
+  pivot_wider(names_from = causa, values_from = n_difetti) %>%
+  replace(is.na(.),0) %>%
+  select(index, 4:9) %>%
+  pivot_longer(cols = 2:7) 
+  
+  ggplot(dati2) +
+    geom_point(aes(index,value, color = name),shape=1, alpha=.5, size = .5) +
+    theme(legend.position = 'bottom') +
+    facet_wrap(~ name) +
+    geom_smooth(aes(index,value,color=name),alpha=.95, se=FALSE, span = 0.5)
+
+  # mutate(NO = ifelse(is.na('NO'),1))
+
+# .var <- 'I03 - DIFETTI FUORI ASSE (INCLUSIONI)'
+# 
+# ggplot(dati2) + 
+  
+
+
+```
+
+ci concentriamo solo sulla variabile I03. 
+```{r I03}
+
+ggplot(datiSF_I03) +
+geom_smooth(aes(index,n_difetti),color='gray',alpha=.75, se=FALSE, span = 0.75) +
+geom_point(aes(index,n_difetti,color=tipo_difetto)) + 
+theme(legend.position = 'bottom')  +
+facet_wrap(~ lingotto_esr)
+
+
+ggplot(datiSF_I03) +
+geom_smooth(aes(index,n_difetti),color='gray',alpha=.75, se=FALSE, span = 0.75) +
+geom_point(aes(index,n_difetti,color=tipo_difetto)) + 
+theme(legend.position = 'bottom')  +
+facet_grid(torre_esr ~ lingotto_esr)
+
+```
+
+
 
 ```{r passagio}
 
